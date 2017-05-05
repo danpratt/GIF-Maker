@@ -10,6 +10,14 @@ import UIKit
 
 class WelcomeViewController: UIViewController {
 
+    @IBOutlet weak var gifImageView: UIImageView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let tinaFeyGif = UIImage.gif(name: "tinaFeyHiFive")
+        gifImageView.image = tinaFeyGif
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
