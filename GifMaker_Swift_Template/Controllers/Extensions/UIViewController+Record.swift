@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 import MobileCoreServices
 
+// Regift constants
+let frameCount = 16
+let delayTime: Float = 0.2
+let loopCount = 0 // loop forever
+
 extension UIViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: - launch video camera
@@ -34,7 +39,8 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
         if mediaType == kUTTypeMovie as String {
             
             let videoURL = info[UIImagePickerControllerMediaURL] as! URL
-            UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path, nil, nil, nil)
+            convertVideoToGIF(videoURL: videoURL)
+//            UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path, nil, nil, nil)
             dismiss(animated: true, completion: nil)
         }
         
@@ -44,5 +50,18 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
         picker.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: - GIF Conversion Methods
+    func convertVideoToGIF(videoURL: URL) {
+        let regift = Regift(sourceFileURL: videoURL, frameCount: frameCount, delayTime: delayTime, loopCount: loopCount)
+        let gifURL = regift.createGif()
+        let gif = Gif(url: gifURL!, videoURL: videoURL, caption: nil)
+        displayGIF(gif: gif)
+    }
+    
+    func displayGIF(gif: Gif) {
+        let gifEditorVC = storyboard?.instantiateViewController(withIdentifier: "GifEditorViewController") as! GifEditorViewController
+        gifEditorVC.gif = gif
+        navigationController?.pushViewController(gifEditorVC, animated: true)
+    }
     
 }
