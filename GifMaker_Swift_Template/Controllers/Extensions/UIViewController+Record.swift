@@ -57,8 +57,7 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
         let recordVideoController = UIImagePickerController()
         recordVideoController.sourceType = .camera
         recordVideoController.mediaTypes = [kUTTypeMovie as String]
-        // will change to true later
-        recordVideoController.allowsEditing = false
+        recordVideoController.allowsEditing = true
         recordVideoController.delegate = self
         present(recordVideoController, animated: true, completion:  nil)
     }
@@ -67,10 +66,30 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
         let photoLibraryController = UIImagePickerController()
         photoLibraryController.sourceType = .photoLibrary
         photoLibraryController.mediaTypes = [kUTTypeMovie as String]
-        // will change to true later
-        photoLibraryController.allowsEditing = false
+        photoLibraryController.allowsEditing = true
         photoLibraryController.delegate = self
         present(photoLibraryController, animated: true, completion: nil)
+    }
+    
+    // MARK: - Methods to handle video editing
+    
+    // Trimming
+    
+    func convertVideoToGif(croppedURL: URL, start: NSNumber?, end: NSNumber?, duration: NSNumber?) {
+        
+        var regift: Regift
+        
+        if start == nil {
+            // untrimmed
+            regift = Regift(sourceFileURL: croppedURL, destinationFileURL: nil, frameCount: frameCount, delayTime: delayTime, loopCount: loopCount)
+        } else {
+            // trimmed
+            regift = Regift(sourceFileURL: croppedURL, destinationFileURL: nil, startTime: (start?.floatValue)!, duration: (duration?.floatValue)!, frameRate: frameCount, loopCount: loopCount)
+        }
+        
+        let gifURL = regift.createGif()
+        let gif = Gif(url: gifURL!, videoURL: croppedURL, caption: nil)
+        displayGIF(gif: gif)
     }
     
     
