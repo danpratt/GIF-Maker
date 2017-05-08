@@ -102,7 +102,20 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
         if mediaType == kUTTypeMovie as String {
             
             let videoURL = info[UIImagePickerControllerMediaURL] as! URL
-            convertVideoToGIF(videoURL: videoURL)
+            let start: NSNumber? = info["_UIImagePickerControllerVideoEditingStart"] as? NSNumber
+            let end: NSNumber? = info["_UIImagePickerControllerVideoEditingEnd"] as? NSNumber
+            var duration: NSNumber?
+            if let start = start {
+                duration = NSNumber(value: (end!.floatValue) - (start.floatValue))
+            } else {
+                duration = nil
+            }
+            
+            if duration == nil {
+                convertVideoToGIF(videoURL: videoURL)
+            } else {
+                convertVideoToGif(croppedURL: videoURL, start: start, end: end, duration: duration)
+            }
 //            UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path, nil, nil, nil)
             dismiss(animated: true, completion: nil)
         }
