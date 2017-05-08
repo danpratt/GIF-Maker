@@ -46,14 +46,26 @@ class GifEditorViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // MARK: - Add caption and present preview
+    
+    @IBAction func presentPreview(_ sender: Any) {
+        let regift = Regift(sourceFileURL: (gif?.videoURL)!, frameCount: frameCount, delayTime: delayTime, loopCount: loopCount)
+        let caption = self.captionTextField.text
+        let captionFont = self.captionTextField.font
+        let gifURL = regift.createGif(caption: caption, font: captionFont)
+        let newGif = Gif(url: gifURL!, videoURL: (gif?.videoURL)!, caption: caption)
+        
+        let previewVC = storyboard?.instantiateViewController(withIdentifier: "PreviewViewController") as! PreviewViewController
+        previewVC.gif = newGif
+        navigationController?.pushViewController(previewVC, animated: true)
+    }
+    
     // MARK: - Keyboard notifications
     
     func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: .UIKeyboardWillHide, object: nil)
     }
-    
-    
     
     func keyboardWillShow (_ notification: NSNotification) {
         if view.frame.origin.y >= 0 {
