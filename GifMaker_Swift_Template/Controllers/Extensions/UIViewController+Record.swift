@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MobileCoreServices
+import AVFoundation
 
 // Regift constants
 let frameCount = 16
@@ -75,7 +76,7 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
     
     // Trimming
     
-    func convertVideoToGif(croppedURL: URL, start: NSNumber?, end: NSNumber?, duration: NSNumber?) {
+    func convertVideoToGif(croppedURL: URL, start: NSNumber?, duration: NSNumber?) {
         
         var regift: Regift
         
@@ -110,16 +111,87 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
             } else {
                 duration = nil
             }
-            
-            if duration == nil {
-                convertVideoToGIF(videoURL: videoURL)
-            } else {
-                convertVideoToGif(croppedURL: videoURL, start: start, end: end, duration: duration)
-            }
-//            UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path, nil, nil, nil)
-            dismiss(animated: true, completion: nil)
+
+//            dismiss(animated: true, completion: nil)
+////            UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path, nil, nil, nil)
+            cropVideoToSquare(rawVideoURL: videoURL, start: start, duration: duration)
         }
         
+    }
+    
+    // MARK: - Cropping to square video
+    
+    func cropVideoToSquare(rawVideoURL: URL, start: NSNumber?, duration: NSNumber?) {
+        
+        //Create the AVAsset and AVAssetTrack
+        let videoAsset = AVAsset(url: rawVideoURL)
+        let videoTrack = videoAsset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        
+        // Crop to square
+        let videoComposition = AVMutableVideoComposition()
+        videoComposition.renderSize = CGSize(width: videoTrack.naturalSize.height, height: videoTrack.naturalSize.height)
+        videoComposition.frameDuration = CMTimeMake(1, 30)
+
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRange(start: kCMTimeZero, duration: CMTimeMakeWithSeconds(60, 30))
+
+        // rotate to portrait
+        let tranformer = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
+        let firstTransform = CGAffineTransform(translationX: videoTrack.naturalSize.height, y: -(videoTrack.naturalSize.width - videoTrack.naturalSize.height)/2.0)
+        let finalTransform = firstTransform.rotated(by: CGFloat.pi / 2)
+
+        tranformer.setTransform(finalTransform, at: kCMTimeZero)
+        instruction.layerInstructions = [tranformer]
+        videoComposition.instructions = [instruction]
+        
+        // export
+        let exporter = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
+        exporter.videoComposition = videoComposition
+        
+        let path = createPath()
+        exporter.outputURL = URL(fileURLWithPath: path)
+        exporter.outputFileType = AVFileTypeQuickTimeMovie
+        
+        exporter.exportAsynchronously(completionHandler: {
+            let croppedURL = (exporter.outputURL)!
+            self.convertVideoToGif(croppedURL: croppedURL, start: start, duration: duration)
+        })
+        
+//        NSString *path = [self createPath];
+//        exporter.outputURL = [NSURL fileURLWithPath:path];
+//        exporter.outputFileType = AVFileTypeQuickTimeMovie;
+//        
+//        __block NSURL *croppedURL;
+//        
+//        [exporter exportAsynchronouslyWithCompletionHandler:^(void){
+//            croppedURL = exporter.outputURL;
+//            [self convertVideoToGif:croppedURL start:start duration:duration];
+//            }];
+
+    }
+    
+    // Create a path
+    func createPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentsDirectory = paths[0]
+        let manager = FileManager.default
+        var outputURL = documentsDirectory.appending("/output")
+        try? manager.createDirectory(atPath: outputURL, withIntermediateDirectories: true, attributes: nil)
+        outputURL = outputURL.appending("/output.mov")
+        
+        // Remove Existing File
+        try? manager.removeItem(atPath: outputURL)
+        
+        return outputURL
+//        NSFileManager *manager = [NSFileManager defaultManager];
+//        NSString *outputURL = [documentsDirectory stringByAppendingPathComponent:@"output"] ;
+//        [manager createDirectoryAtPath:outputURL withIntermediateDirectories:YES attributes:nil error:nil];
+//        outputURL = [outputURL stringByAppendingPathComponent:@"output.mov"];
+//        
+//        // Remove Existing File
+//        [manager removeItemAtPath:outputURL error:nil];
+//        
+//        return outputURL;
     }
     
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -137,7 +209,11 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
     func displayGIF(gif: Gif) {
         let gifEditorVC = storyboard?.instantiateViewController(withIdentifier: "GifEditorViewController") as! GifEditorViewController
         gifEditorVC.gif = gif
-        navigationController?.pushViewController(gifEditorVC, animated: true)
+        DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.pushViewController(gifEditorVC, animated: true)
+        }
+        
     }
     
 }
