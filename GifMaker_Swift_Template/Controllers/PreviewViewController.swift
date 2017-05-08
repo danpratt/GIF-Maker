@@ -22,10 +22,19 @@ class PreviewViewController: UIViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    // MARK: - Sharing GIF
     
-
+    @IBAction func shareGif(_ sender: Any) {
+        if let animatedGif = try? Data(contentsOf: (gif?.url)!) {
+             let itemsToShare: [Data] = [animatedGif]
+            
+            let shareController = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
+            shareController.completionWithItemsHandler? = { (activityType, completed, returnedItems, activityError) in
+                if completed {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+            }
+            navigationController?.present(shareController, animated: true, completion: nil)
+        }
+    }
 }
