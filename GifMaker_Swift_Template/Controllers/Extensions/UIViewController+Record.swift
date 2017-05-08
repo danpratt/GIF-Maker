@@ -15,11 +15,45 @@ let frameCount = 16
 let delayTime: Float = 0.2
 let loopCount = 0 // loop forever
 
+// Pink Color
+let pinkColor = UIColor(red: 1, green: 65.0/255.0, blue: 112.0/255.0, alpha: 1.0)
+
 extension UIViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    // MARK: - launch video camera
+    // MARK: - launch video options
     
-    @IBAction func launchVideoCamera(sender: AnyObject) {
+    @IBAction func presentVideoOptions(sender: AnyObject) {
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            launchPhotoLibrary()
+            
+        } else {
+            // create the action sheet
+            let newGifActionSheet = UIAlertController(title: "Create new GIF", message: nil, preferredStyle: .actionSheet)
+            
+            // recordVideo option
+            let recordVideo = UIAlertAction(title: "Record a Video", style: .default, handler: { (UIAlertAction) in
+                self.launchVideoCamera()
+            })
+            newGifActionSheet.addAction(recordVideo)
+            
+            // pick from photo library option
+            let chooseFromExisting = UIAlertAction(title: "Choose from Existing", style: .default, handler: { (UIAlertAction) in
+                self.launchPhotoLibrary()
+            })
+            newGifActionSheet.addAction(chooseFromExisting)
+            
+            // cancel
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            newGifActionSheet.addAction(cancel)
+            
+            present(newGifActionSheet, animated: true, completion: nil)
+            newGifActionSheet.view.tintColor = pinkColor
+        }
+    }
+    
+    // MARK: - Methods for handling camera and photo library
+    
+    func launchVideoCamera() {
         let recordVideoController = UIImagePickerController()
         recordVideoController.sourceType = .camera
         recordVideoController.mediaTypes = [kUTTypeMovie as String]
@@ -27,6 +61,16 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
         recordVideoController.allowsEditing = false
         recordVideoController.delegate = self
         present(recordVideoController, animated: true, completion:  nil)
+    }
+    
+    func launchPhotoLibrary() {
+        let photoLibraryController = UIImagePickerController()
+        photoLibraryController.sourceType = .photoLibrary
+        photoLibraryController.mediaTypes = [kUTTypeMovie as String]
+        // will change to true later
+        photoLibraryController.allowsEditing = false
+        photoLibraryController.delegate = self
+        present(photoLibraryController, animated: true, completion: nil)
     }
     
     
