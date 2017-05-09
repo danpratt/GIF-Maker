@@ -21,17 +21,17 @@
                         <color key="tintColor" red="1" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="aXC-Xw-CZL" kind="relationship" relationship="rootViewController" id="O6U-Pr-xGP"/>
+                        <segue destination="upq-jB-3dI" kind="relationship" relationship="rootViewController" id="t51-JQ-0a2"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DM2-vZ-vXy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1885.5" y="-783.75"/>
+            <point key="canvasLocation" x="-748" y="65"/>
         </scene>
         <!--My Collection-->
         <scene sceneID="ALv-Et-lNO">
             <objects>
-                <viewController storyboardIdentifier="SavedGifsViewController" title="My Collection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="upq-jB-3dI" customClass="SavedGifsViewController" customModule="GifMaker_Swift_Template" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SavedGifsViewController" title="My Collection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="upq-jB-3dI" customClass="SavedGifsVewController" customModule="GifMaker_Swift_Template" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E4A-ch-Oxv"/>
                         <viewControllerLayoutGuide type="bottom" id="zVw-uv-suS"/>
@@ -100,6 +100,9 @@
                                     <constraint firstAttribute="height" constant="60" id="nD5-xT-Xdf"/>
                                 </constraints>
                                 <state key="normal" image="createButton"/>
+                                <connections>
+                                    <action selector="presentVideoOptionsWithSender:" destination="upq-jB-3dI" eventType="touchUpInside" id="IML-Ey-Rzv"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="rBY-mr-O59">
                                 <rect key="frame" x="16" y="261.5" width="343" height="144"/>
