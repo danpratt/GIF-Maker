@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource, PreviewViewControllerDelegate {
     
@@ -29,6 +30,13 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     // Load up archived gifs
     override func viewDidLoad() {
+        
+        // Bottom Blur
+        let bottomBlur = CAGradientLayer()
+        bottomBlur.frame = CGRect(x: 0, y: view.frame.size.height - 100, width: view.frame.size.width, height: 100)
+        bottomBlur.colors = [UIColor.white.withAlphaComponent(0.0).cgColor, UIColor.white.cgColor]
+        view.layer.insertSublayer(bottomBlur, above: collectionView.layer)
+        
         // no point in checking for saved Gifs if this is the first launch
         if !showWelcomeScreen() {
             if let savedGifs = (NSKeyedUnarchiver.unarchiveObject(withFile: gifsSavePath) as? [Gif]) {
@@ -37,18 +45,28 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
         }
         
         
+        
     }
     
     // Setup collection view
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.title = "My Collection"
         emptyViewImage.isHidden = (gifs.count != 0 )
         if emptyViewImage.isHidden {
             emptyViewLabel.isHidden = true
+        } else {
+            self.navigationController?.navigationBar.isHidden = true
         }
         
         print("Count: \(gifs.count)")
         collectionView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
+        self.title = ""
     }
     
     // MARK: - Welcome Screen
