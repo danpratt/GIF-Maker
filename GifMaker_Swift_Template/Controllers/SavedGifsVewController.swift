@@ -29,9 +29,14 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     // Load up archived gifs
     override func viewDidLoad() {
-        if let savedGifs = (NSKeyedUnarchiver.unarchiveObject(withFile: gifsSavePath) as? [Gif]) {
-            gifs = savedGifs
+        // no point in checking for saved Gifs if this is the first launch
+        if !showWelcomeScreen() {
+            if let savedGifs = (NSKeyedUnarchiver.unarchiveObject(withFile: gifsSavePath) as? [Gif]) {
+                gifs = savedGifs
+            }
         }
+        
+        
     }
     
     // Setup collection view
@@ -44,6 +49,17 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
         
         print("Count: \(gifs.count)")
         collectionView.reloadData()
+    }
+    
+    // MARK: - Welcome Screen
+    
+    private func showWelcomeScreen() -> Bool {
+        if UserDefaults.standard.bool(forKey: "WelcomeViewSeen") != true {
+            let welcomeVC = self.storyboard?.instantiateViewController(withIdentifier: "WelcomeViewController") as! WelcomeViewController
+            navigationController?.pushViewController(welcomeVC, animated: true)
+            return true
+        }
+        return false
     }
     
     // MARK: - Collection View Delegate Methods

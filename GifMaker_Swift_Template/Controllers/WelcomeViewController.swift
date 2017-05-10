@@ -16,28 +16,10 @@ class WelcomeViewController: UIViewController {
         super.viewWillAppear(animated)
         let tinaFeyGif = UIImage.gif(name: "tinaFeyHiFive")
         gifImageView.image = tinaFeyGif
+        
+        // We have seen the welcome screen, so set the UserDefaults for it
+        UserDefaults.standard.set(true, forKey: "WelcomeViewSeen")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
