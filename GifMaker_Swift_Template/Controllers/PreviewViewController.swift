@@ -39,6 +39,9 @@ class PreviewViewController: UIViewController {
         shareButton.layer.cornerRadius = 4
         shareButton.layer.borderColor = UIColor(colorLiteralRed: 1, green: 65.0/255.0, blue: 112.0/255.0, alpha: 1).cgColor
         shareButton.layer.borderWidth = 1
+        
+        // set theme
+        applyTheme(.Dark)
     }
 
     // MARK: - Sharing & Saving GIF

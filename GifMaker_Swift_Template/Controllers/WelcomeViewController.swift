@@ -14,6 +14,11 @@ class WelcomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if !(navigationController?.navigationBar.isHidden)! {
+            applyTheme(.Light)
+        }
+        
         let tinaFeyGif = UIImage.gif(name: "tinaFeyHiFive")
         gifImageView.image = tinaFeyGif
         

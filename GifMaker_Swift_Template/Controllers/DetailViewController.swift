@@ -27,6 +27,7 @@ class DetailViewController: UIViewController {
         }
         
         shareButton.layer.cornerRadius = 4
+        applyTheme(.DarkTranslucent)
     }
     
     // MARK: - IBActions

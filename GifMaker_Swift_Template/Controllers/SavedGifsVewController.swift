@@ -52,6 +52,10 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = "My Collection"
+        
+        // set theme
+        applyTheme(.Light)
+        
         emptyViewImage.isHidden = (gifs.count != 0 )
         if emptyViewImage.isHidden {
             emptyViewLabel.isHidden = true

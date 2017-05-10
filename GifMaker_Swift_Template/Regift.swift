@@ -27,7 +27,7 @@ private struct Group {
     let group = DispatchGroup()
     func enter() { group.enter() }
     func leave() { group.leave() }
-    func wait() { group.wait(timeout: DispatchTime.distantFuture) }
+    func wait() { let _ = group.wait(timeout: DispatchTime.distantFuture) }
 }
 
 /// Easily convert a video to a GIF. It can convert the whole thing, or you can choose a section to trim out.

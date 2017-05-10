@@ -20,6 +20,11 @@ class GifEditorViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         gifImageView.image = gif?.gifImage
         
+        applyTheme(.Dark)
+        
+        // Setup nav bar
+        self.title = "Add a Caption"
+        
         // setup text attributes
         let defaultAttributes: [String: Any] = [
             NSStrokeColorAttributeName: UIColor.black,
