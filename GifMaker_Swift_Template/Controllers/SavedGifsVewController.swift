@@ -13,7 +13,7 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     // Mark: - Properties
     
     // Holds saved gifs
-    var gifs: [Gif]?
+    var gifs: [Gif] = [Gif]()
     
     // Constants
     let cellMargin: CGFloat = 12.0
@@ -26,7 +26,7 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        emptyViewImage.isHidden = (gifs?.count != 0 )
+        emptyViewImage.isHidden = (gifs.count != 0 )
         collectionView.reloadData()
     }
     
@@ -39,17 +39,13 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     // MARK: - Collection View Delegate Methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return gifs?.count ?? 5
+        return gifs.count 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath) as! GifCollectionViewCell
-        if let gif = gifs?[indexPath.item] {
-            cell.configureFor(gif: gif)
-        } else {
-            cell.backgroundColor = UIColor.blue
-        }
-        
+        let gif = gifs[indexPath.item]
+        cell.configureFor(gif: gif)
         
         return cell
     }
@@ -65,7 +61,7 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     func previewVC(preview: PreviewViewController, didSaveGif gif: Gif) {
         gif.gifData = NSData(contentsOf: gif.url)
-        print("set")
+        gifs.append(gif)
     }
 
 }
