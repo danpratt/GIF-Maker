@@ -20,6 +20,28 @@ class GifEditorViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         gifImageView.image = gif?.gifImage
         
+        // setup text attributes
+        let defaultAttributes: [String: Any] = [
+            NSStrokeColorAttributeName: UIColor.black,
+            NSStrokeWidthAttributeName: -4.0,
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40.0)!
+            ]
+        
+        let fadedWhite = UIColor(white: 1, alpha: 0.3)
+        let fadedBlack = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.3)
+        
+        let defaultPlaceholderAttributes: [String: Any] = [
+            NSStrokeColorAttributeName: fadedBlack,
+            NSStrokeWidthAttributeName: -4.0,
+            NSForegroundColorAttributeName: fadedWhite,
+            NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40.0)!
+        ]
+        
+        captionTextField.defaultTextAttributes = defaultAttributes
+        captionTextField.textAlignment = .center
+        captionTextField.attributedPlaceholder = NSAttributedString(string: "Add Caption", attributes: defaultPlaceholderAttributes)
+        
         // subscribe to delegates
         captionTextField.delegate = self
         subscribeToKeyboardNotifications()
