@@ -293,6 +293,8 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="gifImageView" destination="HQu-c2-zTO" id="yri-jM-JXo"/>
+                        <outlet property="saveButton" destination="xoi-MZ-GNH" id="tZF-S6-6eM"/>
+                        <outlet property="shareButton" destination="lnU-9g-0xe" id="aOK-fT-MRi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KCC-tI-bRp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -358,6 +360,7 @@
                     </view>
                     <connections>
                         <outlet property="gifImageView" destination="fMj-xi-5Fm" id="f2a-mQ-o5m"/>
+                        <outlet property="shareButton" destination="tie-bE-ygI" id="LIM-Qj-yaD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BEl-4x-y0s" userLabel="First Responder" sceneMemberID="firstResponder"/>

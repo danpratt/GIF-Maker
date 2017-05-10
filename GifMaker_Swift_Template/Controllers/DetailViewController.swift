@@ -18,12 +18,15 @@ class DetailViewController: UIViewController {
     
     // IBOutlets
     @IBOutlet weak var gifImageView: UIImageView!
+    @IBOutlet weak var shareButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if let gif = gif {
             gifImageView.image = gif.gifImage
         }
+        
+        shareButton.layer.cornerRadius = 4
     }
     
     // MARK: - IBActions

@@ -58,8 +58,7 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
         } else {
             self.navigationController?.navigationBar.isHidden = true
         }
-        
-        print("Count: \(gifs.count)")
+
         collectionView.reloadData()
     }
     

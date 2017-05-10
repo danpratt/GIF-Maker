@@ -23,12 +23,22 @@ class PreviewViewController: UIViewController {
     
     // IBOutlets
     @IBOutlet weak var gifImageView: UIImageView!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if gif != nil {
             gifImageView.image = gif?.gifImage
         }
+        
+        // Setup save button style
+        saveButton.layer.cornerRadius = 4
+        
+        // Setup Share Button style
+        shareButton.layer.cornerRadius = 4
+        shareButton.layer.borderColor = UIColor(colorLiteralRed: 1, green: 65.0/255.0, blue: 112.0/255.0, alpha: 1).cgColor
+        shareButton.layer.borderWidth = 1
     }
 
     // MARK: - Sharing & Saving GIF
