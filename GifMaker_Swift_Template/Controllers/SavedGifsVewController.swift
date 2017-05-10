@@ -14,6 +14,9 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     // Holds saved gifs
     var gifs: [Gif] = [Gif]()
+    var gifsSavePath: String {
+        return NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0] + "/savedGifs"
+    }
     
     // Constants
     let cellMargin: CGFloat = 12.0
@@ -21,21 +24,28 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     // Outlets
     @IBOutlet weak var emptyViewImage: UIImageView!
+    @IBOutlet weak var emptyViewLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    // Load up archived gifs
+    override func viewDidLoad() {
+        if let savedGifs = (NSKeyedUnarchiver.unarchiveObject(withFile: gifsSavePath) as? [Gif]) {
+            gifs = savedGifs
+        }
+    }
     
+    // Setup collection view
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         emptyViewImage.isHidden = (gifs.count != 0 )
+        if emptyViewImage.isHidden {
+            emptyViewLabel.isHidden = true
+        }
+        
+        print("Count: \(gifs.count)")
         collectionView.reloadData()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
     // MARK: - Collection View Delegate Methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -62,6 +72,7 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
     func previewVC(preview: PreviewViewController, didSaveGif gif: Gif) {
         gif.gifData = NSData(contentsOf: gif.url)
         gifs.append(gif)
+        NSKeyedArchiver.archiveRootObject(gifs, toFile: gifsSavePath)
     }
 
 }
