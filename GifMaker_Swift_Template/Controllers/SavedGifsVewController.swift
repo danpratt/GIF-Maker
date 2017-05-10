@@ -60,6 +60,16 @@ class SavedGifsVewController: UIViewController, UICollectionViewDelegateFlowLayo
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let gif = gifs[indexPath.row]
+        
+        let detailVC = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        detailVC.gif = gif
+        
+        detailVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        present(detailVC, animated: true, completion: nil)
+    }
+    
     // MARK: - Flow Layout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
