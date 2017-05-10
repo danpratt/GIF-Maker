@@ -8,11 +8,20 @@
 
 import UIKit
 
+// Mark: - Protocol Declaration
+protocol PreviewViewControllerDelegate {
+    func previewVC(preview: PreviewViewController, didSaveGif gif: Gif)
+}
+
 class PreviewViewController: UIViewController {
     
     // MARK: - Properties
     
+    // Gif For Preview
     var gif: Gif?
+    var delegate: PreviewViewControllerDelegate?
+    
+    // IBOutlets
     @IBOutlet weak var gifImageView: UIImageView!
 
     override func viewWillAppear(_ animated: Bool) {
@@ -22,7 +31,7 @@ class PreviewViewController: UIViewController {
         }
     }
 
-    // MARK: - Sharing GIF
+    // MARK: - Sharing & Saving GIF
     
     @IBAction func shareGif(_ sender: Any) {
         if let animatedGif = try? Data(contentsOf: (gif?.url)!) {
@@ -37,4 +46,11 @@ class PreviewViewController: UIViewController {
             navigationController?.present(shareController, animated: true, completion: nil)
         }
     }
+    
+    
+    @IBAction func createAndSave(_ sender: Any) {
+        self.delegate?.previewVC(preview: self, didSaveGif: gif!)
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
 }
